@@ -1,0 +1,4 @@
+This was a project for my Computer Graphics course.  It's a 3D version of
+the classic Atari game Asteroids!  It was developed primarily on Mac OS X
+(the Makefile in particular is Mac-specific) but was also tested on Windows
+with Visual Studio 2010.  It's written in C++ and uses OpenGL and GLUT.
