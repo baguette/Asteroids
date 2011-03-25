@@ -8,7 +8,7 @@
 Laser::Laser(Vector s, Vector dir, double v)
 {
 	//n_edges = 1;
-	n_edges = 0;
+	shape = Point;
 	this->s = s;
 	this->dir = dir;
 	this->v = v + 0.1;
@@ -24,9 +24,10 @@ bool Laser::isAlive()
 	return (this->lifetime > 0);
 }
 
-void Laser::behavior()
+int Laser::behavior()
 {
 	--lifetime;
+	return 0;
 }
 
 void Laser::wire()
@@ -40,21 +41,6 @@ void Laser::wire()
 
 void Laser::solid()
 {
-}
-
-Range Laser::edge(int n)
-{
-	Vector u = dir*-1.0, w = dir;
-	if (n == 2) { u = Vector(u.y*-1.0, u.x, 0); w = Vector(w.y*-1.0, w.x, 0); }
-	u += s; w += s;
-	return Range(u, w);
-}
-
-Range Laser::shadow(Vector v)
-{
-	Vector u = s;
-	u.z = 0;
-	return Range(u.projection(v), u.projection(v));
 }
 
 void Laser::update()

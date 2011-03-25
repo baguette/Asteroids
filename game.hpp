@@ -31,23 +31,32 @@ class Game : public Scene {
 	static const int RECHARGE = 7;
 	float color[4];
 	
+	bool small_alien_is_fair_game;
+	unsigned int countdown;
+	
 	Ship hud;
 
 	/* entity ranges */
 	static const int ship = 0;		/* just one ship */
-	static const int laser = 1;		/* maximum of (ast - laser) lasers... 4 in this case */
-	static const int ast = 5;		/* maximum of (end - ast) asteroids */
+	static const int alien = 1;
+	static const int laser = 2;		/* maximum of (aLaser - laser) lasers... 4 in this case */
+	static const int aLaser = 6;
+	static const int ast = 7;		/* maximum of (end - ast) asteroids */
 	int end;			/* end of entities... one past the last entity */
 
 	int n_ast;		/* number of initial asteroids */
+	int level;
+	long score;
 	std::stringstream level_msg;
+	std::stringstream score_msg;
+	std::stringstream lives_msg;
 	
 	bool done;
 
 	void fire();
+	void alienFire(int);
 public:
-	Game(int n);
-	Game(int n, int l);
+	Game(int level, int lives, long score);
 	~Game();
 
 	virtual Scene *next_scene();

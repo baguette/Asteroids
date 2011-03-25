@@ -5,6 +5,8 @@ CC=gcc
 CXX=g++
 
 all: $(SOURCES)
+	$(CXX) -o $(EXE) $(FRAMEWORKS) $(SOURCES)
+debug: $(SOURCES)
 	$(CXX) -g -o $(EXE) $(FRAMEWORKS) $(SOURCES)
 
 gameover.cpp: gameover.hpp

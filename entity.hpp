@@ -2,6 +2,7 @@
 #define _ENTITY_HPP
 
 #include "vector.hpp"
+#include <vector>
 
 /*
  * Defines an interface for all game objects to implement.
@@ -21,7 +22,13 @@ public:
 	double 	v,	/* velocity */
 			a,	/* acceleration */
 			mass;
-	int		n_edges;
+	long	points;
+	// Shape used for collision detection
+	enum Shape {
+		None = 0, Point, Circle, Polygon
+	} shape;
+	// Vertices used for collision detection
+	virtual std::vector<Vector> vertices() {};
 	
 	Entity();
 	virtual ~Entity();
@@ -32,7 +39,7 @@ public:
 	/* Update callback. Each entity should be able to update itself. */
 	virtual void update();
 	
-	virtual void behavior();
+	virtual int behavior();
 	
 	virtual bool isAlive() = 0;
 	
@@ -41,12 +48,6 @@ public:
 	
 	/* Draw a solid version of this entity. */
 	virtual void solid() = 0;
-	
-	/* Get the projection of this entity using edge v */
-	virtual Range shadow(Vector v) = 0;
-	
-	/* Get the vector representing edge n */
-	virtual Range edge(int n) = 0;
 };
 
 #endif

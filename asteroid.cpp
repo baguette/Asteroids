@@ -35,13 +35,13 @@ void Asteroid::genericAsteroid(GLenum mode)
 	glEnd();
 }
 
-Asteroid::Asteroid()
+void Asteroid::init()
 {
 	int i = 0;
 	float phi, theta;	/* azimuth, inclination */
 	float radius = 1.0;
 
-	/* use the same radius for all of the pole vertices */
+	/* use the same radius for all of the pole xvertices */
 	float zr = random_vertex;
 	float nzr = random_vertex;
 	
@@ -49,10 +49,10 @@ Asteroid::Asteroid()
 	int x, y;
 	int edge;
 	
-//	n_edges = 2;
-	n_edges = 0;
+	shape = Circle;
+	points = 20;
 
-	/* build a set of all the vertices in the asteroid */
+	/* build a set of all the xvertices in the asteroid */
 	for (theta = 0; theta < M_PI; theta += subs)
 		for (phi = 0; phi < 2*M_PI;  phi += subs) {
 			assert(i < nverts);
@@ -60,19 +60,19 @@ Asteroid::Asteroid()
 			 * a vertex there
 			 */
 			if (theta == 0) {
-				vertices[i][0] = 0;
-				vertices[i][1] = 0;
-				vertices[i][2] = zr;
+				xvertices[i][0] = 0;
+				xvertices[i][1] = 0;
+				xvertices[i][2] = zr;
 			} else if (theta > M_PI-subs) {
-				vertices[i][0] = 0;
-				vertices[i][1] = 0;
-				vertices[i][2] = -nzr;
+				xvertices[i][0] = 0;
+				xvertices[i][1] = 0;
+				xvertices[i][2] = -nzr;
 			} else {
 				/* randomly perturb each vertex */
 				radius = random_vertex;
-				vertices[i][0] = radius * cos(phi) * sin(theta);
-				vertices[i][1] = radius * sin(phi) * sin(theta);
-				vertices[i][2] = radius * cos(theta);
+				xvertices[i][0] = radius * cos(phi) * sin(theta);
+				xvertices[i][1] = radius * sin(phi) * sin(theta);
+				xvertices[i][2] = radius * cos(theta);
 			}
 			/* The last phi values are special cases, too.
 			 * Without this, the sphere is composed of a spiral
@@ -81,33 +81,33 @@ Asteroid::Asteroid()
 			 * in the last conditional.
 			 */
 			if (phi > 2*M_PI - subs) {
-				vertices[i][0] = vertices[i-tsubs+1][0];
-				vertices[i][1] = vertices[i-tsubs+1][1];
-				vertices[i][2] = vertices[i-tsubs+1][2];
+				xvertices[i][0] = xvertices[i-tsubs+1][0];
+				xvertices[i][1] = xvertices[i-tsubs+1][1];
+				xvertices[i][2] = xvertices[i-tsubs+1][2];
 			}
 			i++;
 		}
 
-	/* build the actual model of the asteroid by linking all the vertices
+	/* build the actual model of the asteroid by linking all the xvertices
 	 * in counter-clockwise order; the first vertex of each group is also
 	 * the normal of that face
 	 */
 	for (i = 0; i < nverts; i++) {
-		asteroid[i*4][0] = vertices[i][0];
-		asteroid[i*4][1] = vertices[i][1];
-		asteroid[i*4][2] = vertices[i][2];
+		asteroid[i*4][0] = xvertices[i][0];
+		asteroid[i*4][1] = xvertices[i][1];
+		asteroid[i*4][2] = xvertices[i][2];
 	
-		asteroid[i*4+1][0] = vertices[i+tsubs][0];
-		asteroid[i*4+1][1] = vertices[i+tsubs][1];
-		asteroid[i*4+1][2] = vertices[i+tsubs][2];
+		asteroid[i*4+1][0] = xvertices[i+tsubs][0];
+		asteroid[i*4+1][1] = xvertices[i+tsubs][1];
+		asteroid[i*4+1][2] = xvertices[i+tsubs][2];
 
-		asteroid[i*4+2][0] = vertices[i+tsubs+1][0];
-		asteroid[i*4+2][1] = vertices[i+tsubs+1][1];
-		asteroid[i*4+2][2] = vertices[i+tsubs+1][2];
+		asteroid[i*4+2][0] = xvertices[i+tsubs+1][0];
+		asteroid[i*4+2][1] = xvertices[i+tsubs+1][1];
+		asteroid[i*4+2][2] = xvertices[i+tsubs+1][2];
 	
-		asteroid[i*4+3][0] = vertices[i+1][0];
-		asteroid[i*4+3][1] = vertices[i+1][1];
-		asteroid[i*4+3][2] = vertices[i+1][2];
+		asteroid[i*4+3][0] = xvertices[i+1][0];
+		asteroid[i*4+3][1] = xvertices[i+1][1];
+		asteroid[i*4+3][2] = xvertices[i+1][2];
 	}
 	
 	/* randomly determine which edge of the screen to appear on */
@@ -142,10 +142,36 @@ Asteroid::Asteroid()
 	this->dir.normalize();
 }
 
+Asteroid::Asteroid()
+{
+	init();
+}
+
+Asteroid::Asteroid(const Entity &old, bool second)
+{
+	init();
+	
+	this->scale = old.scale / 1.6;
+	this->s = second ?	// this is sort of hackish... make sure asteroids don't appear in the same place
+		  old.s + Vector(old.scale.x, 0, 0)
+		: old.s - Vector(old.scale.x, 0, 0);
+	switch (old.points) {
+		case 20:
+			this->points = 50;
+			break;
+		case 50:
+			this->points = 100;
+			break;
+		default:
+			this->points = 20;
+	}
+}
+
 Asteroid::~Asteroid() {}
 
-void Asteroid::behavior()
+int Asteroid::behavior()
 {
+	return 0;
 }
 
 void Asteroid::wire()
@@ -162,27 +188,3 @@ bool Asteroid::isAlive()
 {
 	return scale.norm() >= min_scale;
 }
-
-Range Asteroid::edge(int n)
-{
-	Vector u = dir*-1, w = dir;
-	if (n == 2) { u = Vector(u.y*-1.0, u.x, 0); w = Vector(w.y*-1.0, w.x, 0); }
-	u.componentwise_scale(scale);
-	w.componentwise_scale(scale);
-	u += s; w += s;
-	u.z = 0; w.z = 0;
-	return Range(u, w);
-}
-
-Range Asteroid::shadow(Vector v)
-{
-	Vector u(-1, 0, 0), w(1, 0, 0);
-	u.componentwise_scale(scale);
-	w.componentwise_scale(scale);
-	u = v.normal() * u.norm();
-	w = v.normal() * w.norm();
-	u += s; w += s;
-	u.z = 0; w.z = 0;
-	return Range(u.projection(v), w.projection(v));
-}
-

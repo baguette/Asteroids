@@ -57,7 +57,7 @@ Scene *Title::next_scene()
 {
 	if (done)
 		return NULL;
-	return new Game(3);
+	return new Game(1, 4, 0);
 }
 
 void Title::display()

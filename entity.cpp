@@ -15,7 +15,8 @@ Entity::Entity()
 	a = 0;
 	v = 0;
 	mass = 0;
-	n_edges = 0;
+	shape = None;
+	points = 0;
 }
 
 Entity::~Entity() {}
@@ -53,4 +54,5 @@ void Entity::update()
 	/* TODO: gravity */
 }
 
-void Entity::behavior() {}
+// returns a message to the game engine... 0 is "no message"
+int Entity::behavior() { return 0; }

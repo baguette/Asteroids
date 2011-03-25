@@ -14,13 +14,12 @@ public:
 	~Explosion();
 	
 	bool isAlive();
-	void behavior();
+	int behavior();
 	void wire();
 	void solid();
 	void update();
 
-	Range edge(int n) { return Range(); }
-	Range shadow(Vector v) { return Range(); }
+	std::vector<Vector> vertices() {}
 };
 
 #endif

@@ -12,14 +12,13 @@ public:
 	~Laser();
 	
 	bool isAlive();
-	void behavior();
+ 	int behavior();
 	void wire();
 	void solid();
 
 	void update();
 	
-	Range edge(int n);
- 	Range shadow(Vector v);
+	virtual std::vector<Vector> vertices() {};
 };
 
 #endif

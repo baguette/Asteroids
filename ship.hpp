@@ -8,13 +8,12 @@ public:
 	Ship();
 	~Ship();
 	
-	void behavior();
+	int behavior();
 	void wire();
 	void solid();
 	bool isAlive();
 	
-	Range edge(int n);
-	Range shadow(Vector v);
+	virtual std::vector<Vector> vertices();
 };
 
 #endif

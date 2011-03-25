@@ -4,8 +4,8 @@
 Explosion::Explosion()
 {
 	int i;
+	shape = None;
 	delay = 30;
-	n_edges = -1;
 	n_points = 80;
 	scale(0.1, 0.1, 0.1);
 	s(0, 0, 0);
@@ -25,7 +25,7 @@ bool Explosion::isAlive()
 	return (delay > 0);
 }
 
-void Explosion::behavior()
+int Explosion::behavior()
 {
 	if (scale.norm() >= 1.6) {
 		scale();
@@ -33,6 +33,8 @@ void Explosion::behavior()
 	}
 	scale = scale * 1.6;
 	delay--;
+	
+	return 0;
 }
 
 void Explosion::update() {}

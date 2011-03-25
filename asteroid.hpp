@@ -17,23 +17,24 @@ private:
 
 	static const double min_scale;
 
-	float vertices[nverts][3];
+	float xvertices[nverts][3];
 	/* The final asteroid has repeated vertices along shared edges */
 	float asteroid[nverts*4][3];
-
+	
+	void init();
 	void genericAsteroid(GLenum mode);
 	
 public:
 	Asteroid();
+	Asteroid(const Entity &old, bool second=false);
 	~Asteroid();
 	
-	void behavior();
+	int behavior();
 	void wire();
 	void solid();
 	bool isAlive();
 	
- 	Range edge(int n);
-	Range shadow(Vector v);
+	std::vector<Vector> vertices() {};
 };
 
 #endif

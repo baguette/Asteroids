@@ -69,6 +69,10 @@ public:
 	Range operator*(const Range &y) const;
 	Range operator+(const Range &y) const;
 	bool overlaps(const Range &y) const;
+	
+	static double den(Range a, Range b);
+	static double t1(Range a, Range b);
+	static double t2(Range a, Range b);
 };
 
 #endif

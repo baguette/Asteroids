@@ -305,3 +305,30 @@ Vector Range::maximum() const
 {
 	return (a.norm() > b.norm()) ? a : b;
 }
+
+double Range::den(Range a, Range b)
+{
+	double x1, x2, x3, x4, y1, y2, y3, y4;
+	x1 = a.a.x; x2 = a.b.x; x3 = b.a.x; x4 = b.b.x;
+	y1 = a.a.y; y2 = a.b.y; y3 = b.a.y; x4 = b.b.y;
+	
+	return (y4-y3)*(x2-x1) - (x4-x3)*(y2-y1);
+}
+
+double Range::t1(Range a, Range b)
+{
+	double x1, x2, x3, x4, y1, y2, y3, y4;
+	x1 = a.a.x; x2 = a.b.x; x3 = b.a.x; x4 = b.b.x;
+	y1 = a.a.y; y2 = a.b.y; y3 = b.a.y; x4 = b.b.y;
+	
+	return (x4-x3)*(y1-y3)-(y4-y3)*(x1-x3);
+}
+
+double Range::t2(Range a, Range b)
+{
+	double x1, x2, x3, x4, y1, y2, y3, y4;
+	x1 = a.a.x; x2 = a.b.x; x3 = b.a.x; x4 = b.b.x;
+	y1 = a.a.y; y2 = a.b.y; y3 = b.a.y; x4 = b.b.y;
+	
+	return (x2-x1)*(y1-y3)-(y2-y1)*(x1-x3);
+}
