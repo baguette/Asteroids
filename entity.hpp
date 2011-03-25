@@ -1,5 +1,5 @@
-#ifndef _ENTITY_H
-#define _ENTITY_H
+#ifndef _ENTITY_HPP
+#define _ENTITY_HPP
 
 #include "vector.hpp"
 
@@ -21,15 +21,16 @@ public:
 	double 	v,	/* velocity */
 			a,	/* acceleration */
 			mass;
+	int		n_edges;
 	
 	Entity();
 	virtual ~Entity();
 	
 	/* Apply the transformations for this entity. */
-	void transform();
+	virtual void transform();
 	
 	/* Update callback. Each entity should be able to update itself. */
-	void update();
+	virtual void update();
 	
 	virtual void behavior();
 	
@@ -40,6 +41,12 @@ public:
 	
 	/* Draw a solid version of this entity. */
 	virtual void solid() = 0;
+	
+	/* Get the projection of this entity using edge v */
+	virtual Range shadow(Vector v) = 0;
+	
+	/* Get the vector representing edge n */
+	virtual Range edge(int n) = 0;
 };
 
 #endif

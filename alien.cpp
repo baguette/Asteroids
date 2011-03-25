@@ -1,7 +1,10 @@
 #include "common.h"
 #include "alien.hpp"
 
-Alien::Alien() {}
+Alien::Alien()
+{
+	n_edges = 0;
+}
 
 Alien::~Alien() {}
 

@@ -1,5 +1,6 @@
 #include "common.h"
 
+#include <stdlib.h>
 #include <math.h>
 
 #include "entity.hpp"
@@ -14,6 +15,7 @@ Entity::Entity()
 	a = 0;
 	v = 0;
 	mass = 0;
+	n_edges = 0;
 }
 
 Entity::~Entity() {}
@@ -25,7 +27,6 @@ void Entity::transform()
 	glRotatef(rotate.z, 0.0, 0.0, 1.0);
 	glRotatef(rotate.x, 1.0, 0.0, 0.0);
 	glRotatef(rotate.y, 0.0, 1.0, 0.0);
-	
 	
 	glScalef(scale.x, scale.y, scale.z);
 }

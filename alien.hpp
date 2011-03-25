@@ -8,9 +8,13 @@ class Alien : public Entity {
 public:
 	Alien();
 	~Alien();
+	
 	void wire();
 	void solid();
 	bool isAlive();
+	
+	Range edge(int n) { return Range(Vector(), Vector()); };
+	Range shadow(Vector v) { return Range(Vector(), Vector()); };
 };
 
 #endif

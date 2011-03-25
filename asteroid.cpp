@@ -5,8 +5,13 @@
 #include <math.h>
 #include <assert.h>
 
+#include <typeinfo>
+
+#include "entity.hpp"
+#include "laser.hpp"
 #include "asteroid.hpp"
 
+/* max vertex is 1 */
 #define random_vertex (0.6 + ((float)rand() / (float)RAND_MAX) / 2.5)
 
 #define TOP 0
@@ -15,6 +20,7 @@
 #define LEFT 3
 
 const float Asteroid::subs = M_PI/(psubs-1);
+const double Asteroid::min_scale = 0.4;
 
 void Asteroid::genericAsteroid(GLenum mode)
 {
@@ -42,6 +48,9 @@ Asteroid::Asteroid()
 	/* use for placement of the asteroid */
 	int x, y;
 	int edge;
+	
+//	n_edges = 2;
+	n_edges = 0;
 
 	/* build a set of all the vertices in the asteroid */
 	for (theta = 0; theta < M_PI; theta += subs)
@@ -128,6 +137,7 @@ Asteroid::Asteroid()
 	this->a = 0;
 	this->v = rando(0.02, 0.06);
 	this->r(rando(0, 5), rando(0, 5), rando(0, 5));
+	this->scale(1, 1, 1);
 	this->dir(rando(-1, 1), rando(-1, 1), 0);
 	this->dir.normalize();
 }
@@ -150,5 +160,29 @@ void Asteroid::solid()
 
 bool Asteroid::isAlive()
 {
-	return true;
+	return scale.norm() >= min_scale;
 }
+
+Range Asteroid::edge(int n)
+{
+	Vector u = dir*-1, w = dir;
+	if (n == 2) { u = Vector(u.y*-1.0, u.x, 0); w = Vector(w.y*-1.0, w.x, 0); }
+	u.componentwise_scale(scale);
+	w.componentwise_scale(scale);
+	u += s; w += s;
+	u.z = 0; w.z = 0;
+	return Range(u, w);
+}
+
+Range Asteroid::shadow(Vector v)
+{
+	Vector u(-1, 0, 0), w(1, 0, 0);
+	u.componentwise_scale(scale);
+	w.componentwise_scale(scale);
+	u = v.normal() * u.norm();
+	w = v.normal() * w.norm();
+	u += s; w += s;
+	u.z = 0; w.z = 0;
+	return Range(u.projection(v), w.projection(v));
+}
+

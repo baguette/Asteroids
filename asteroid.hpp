@@ -1,5 +1,5 @@
-#ifndef _ASTEROID_H
-#define _ASTEROID_H
+#ifndef _ASTEROID_HPP
+#define _ASTEROID_HPP
 
 #include "common.h"
 
@@ -14,20 +14,26 @@ private:
 	static const int nverts = psubs * tsubs;	/* number of vertices */
 	/* increments of this value will be used when calculating vertices */
 	static const float subs;	/* VS won't let me initiliaze this within the class definition... */
-	
+
+	static const double min_scale;
+
 	float vertices[nverts][3];
 	/* The final asteroid has repeated vertices along shared edges */
 	float asteroid[nverts*4][3];
-	
+
 	void genericAsteroid(GLenum mode);
 	
 public:
 	Asteroid();
 	~Asteroid();
+	
 	void behavior();
 	void wire();
 	void solid();
 	bool isAlive();
+	
+ 	Range edge(int n);
+	Range shadow(Vector v);
 };
 
 #endif

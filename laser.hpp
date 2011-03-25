@@ -6,15 +6,20 @@
 #include "vector.hpp"
 
 class Laser : public Entity {
-private:
-	int lifetime;
 public:
+	int lifetime;
 	Laser(Vector s, Vector d, double v);
 	~Laser();
+	
 	bool isAlive();
 	void behavior();
 	void wire();
 	void solid();
+
+	void update();
+	
+	Range edge(int n);
+ 	Range shadow(Vector v);
 };
 
 #endif
