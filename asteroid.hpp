@@ -24,8 +24,10 @@ private:
 public:
 	Asteroid();
 	~Asteroid();
+	void behavior();
 	void wire();
 	void solid();
+	bool isAlive();
 };
 
 #endif

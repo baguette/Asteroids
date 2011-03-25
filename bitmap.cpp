@@ -4,6 +4,10 @@
 #include "common.h"
 #include "bitmap.hpp"
 
+/*
+ * Constructor.
+ * Loads bitmap data from file into a new Bitmap object.
+ */
 Bitmap::Bitmap(const char *file)
 {
 	FILE *fp;
@@ -65,6 +69,10 @@ Bitmap::Bitmap(const char *file)
 	fclose(fp);
 }
 
+/*
+ * Destructor.
+ * Frees data that was allocated in the constructor.
+ */
 Bitmap::~Bitmap()
 {
 	free(bitmap.palette);
@@ -73,6 +81,9 @@ Bitmap::~Bitmap()
 	bitmap.data = NULL;
 }
 
+/*
+ * Draw this Bitmap at x, y (OpenGL world coordinates).
+ */
 void Bitmap::draw(float x, float y)
 {	
 	int height = bitmap.height;
@@ -81,6 +92,11 @@ void Bitmap::draw(float x, float y)
 	glDrawPixels(bitmap.width, height, GL_BGRA, GL_UNSIGNED_INT_8_8_8_8_REV, bitmap.data);
 }
 
+/*
+ * Determine if this Bitmap has valid data associated with it.
+ * This is just a hackish way to handle errors. It'd be much better
+ * to throw an exception, but I didn't feel like it.
+ */
 bool Bitmap::isLoaded()
 {
 	if (bitmap.data)

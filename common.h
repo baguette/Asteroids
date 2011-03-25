@@ -15,3 +15,8 @@
 #else
 #include <glut/glut.h>
 #endif
+
+#define SIZEOF(x) (sizeof(x) / sizeof(x[0]))
+
+extern double rando(double a, double b);
+extern int window_height, window_width;

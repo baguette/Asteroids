@@ -7,8 +7,10 @@ class Ship : public Entity {
 public:
 	Ship();
 	~Ship();
+	void behavior();
 	void wire();
 	void solid();
+	bool isAlive();
 };
 
 #endif

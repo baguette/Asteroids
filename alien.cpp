@@ -16,3 +16,8 @@ void Alien::solid()
 	glutSolidTorus(0.39, 0.65, 6, 6);
 	glutSolidSphere(0.6, 8, 8);
 }
+
+bool Alien::isAlive()
+{
+	return true;
+}

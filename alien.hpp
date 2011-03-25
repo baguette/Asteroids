@@ -10,6 +10,7 @@ public:
 	~Alien();
 	void wire();
 	void solid();
+	bool isAlive();
 };
 
 #endif

@@ -9,6 +9,11 @@
 
 #define random_vertex (0.6 + ((float)rand() / (float)RAND_MAX) / 2.5)
 
+#define TOP 0
+#define RIGHT 1
+#define BOTTOM 2
+#define LEFT 3
+
 const float Asteroid::subs = M_PI/(psubs-1);
 
 void Asteroid::genericAsteroid(GLenum mode)
@@ -33,6 +38,10 @@ Asteroid::Asteroid()
 	/* use the same radius for all of the pole vertices */
 	float zr = random_vertex;
 	float nzr = random_vertex;
+	
+	/* use for placement of the asteroid */
+	int x, y;
+	int edge;
 
 	/* build a set of all the vertices in the asteroid */
 	for (theta = 0; theta < M_PI; theta += subs)
@@ -91,11 +100,42 @@ Asteroid::Asteroid()
 		asteroid[i*4+3][1] = vertices[i+1][1];
 		asteroid[i*4+3][2] = vertices[i+1][2];
 	}
+	
+	/* randomly determine which edge of the screen to appear on */
+	edge = rando(0, 4);		// should be an integer between 0 and 3
+	switch (edge) {
+		case TOP:
+			y = 4.4;
+			x = rando(0, 5);
+			break;
+		case BOTTOM:
+			y = -4.4;
+			x = rando(0, 5);
+			break;
+		case LEFT:
+			x = -4.4;
+			y = rando(0, 5);
+			break;
+		case RIGHT:
+			x = 4.4;
+			y = rando(0, 5);
+			break;
+		default: printf("invalid edge: %d\n", edge);
+	}
+	this->s.x = x;
+	this->s.y = y;
+	
+	this->a = 0;
+	this->v = rando(0.02, 0.06);
+	this->r(rando(0, 5), rando(0, 5), rando(0, 5));
+	this->dir(rando(-1, 1), rando(-1, 1), 0);
+	this->dir.normalize();
 }
 
-Asteroid::~Asteroid()
+Asteroid::~Asteroid() {}
+
+void Asteroid::behavior()
 {
-	
 }
 
 void Asteroid::wire()
@@ -108,49 +148,7 @@ void Asteroid::solid()
 	genericAsteroid(GL_QUADS);
 }
 
-
-/* relic code */
-#if 0
-void dumbAsteroid()
+bool Asteroid::isAlive()
 {
-	int i = 0;
-	float phi, theta;
-	float radius = 1.0;
-	float x[4], y[4], z[4];
-	
-	for (theta = 0; theta < M_PI - subs; theta += subs)
-		for (phi = 0; phi < 2*M_PI - subs; phi += subs) {
-			printf("Theta: %f, Phi: %f\n", theta, phi);
-			/* generate the 4 vertices of this square of the sphere */
-			// radius = 0.75 + ((float)rand() / (float)RAND_MAX) / 2.0;
-			x[0] = radius * cos(phi) * sin(theta);
-			y[0] = radius * sin(phi) * sin(theta);
-			z[0] = radius * cos(theta);
-			printf("X: %f  Y: %f  Z: %f\n", x[0], y[0], z[0]);
-			
-			x[1] = radius * cos(phi) * sin(theta + subs);
-			y[1] = radius * sin(phi) * sin(theta + subs);
-			z[1] = radius * cos(theta + subs);
-			printf("X: %f  Y: %f  Z: %f\n", x[1], y[1], z[1]);
-			
-			x[2] = radius * cos(phi + subs) * sin(theta + subs);
-			y[2] = radius * sin(phi + subs) * sin(theta + subs);
-			z[2] = radius * cos(theta + subs);
-			printf("X: %f  Y: %f  Z: %f\n", x[2], y[2], z[2]);
-
-			x[3] = radius * cos(phi + subs) * sin(theta);
-			y[3] = radius * sin(phi + subs) * sin(theta);
-			z[3] = radius * cos(theta);
-			printf("X: %f  Y: %f  Z: %f\n", x[3], y[3], z[3]);
-			printf("\n");
-			
-			/* Put the vertices in the array in the correct order */
-			#define a asteroid[i]
-			a[0] = x[0]; a[1] = y[0]; a[2] = z[0]; i++;
-			a[0] = x[1]; a[1] = y[1]; a[2] = z[1]; i++;
-			a[0] = x[2]; a[1] = y[2]; a[2] = z[2]; i++;
-			a[0] = x[3]; a[1] = y[3]; a[2] = z[3]; i++;
-			#undef a
-		}
+	return true;
 }
-#endif

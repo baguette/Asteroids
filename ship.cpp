@@ -31,8 +31,20 @@ static float square[][3] = {
 	{0.5, -0.3, 0.3}
 };
 
-Ship::Ship() {}
+Ship::Ship() {
+	r(8, 0, 0);
+	scale(0.8, 0.8, 0.8);
+}
 Ship::~Ship() {}
+
+void Ship::behavior()
+{
+	dir(-1, 0, 0);
+	dir.rotate(rotate.z);
+	
+	a = 0;
+	v /= 1.1;
+}
 
 void Ship::wire()
 {
@@ -64,4 +76,9 @@ void Ship::solid()
 	for (i = 0; i < sizeof(square) / sizeof(square[0]) - 1; i++)
 		glVertex3fv(square[i]);
 	glEnd();
+}
+
+bool Ship::isAlive()
+{
+	return true;
 }
